@@ -10,15 +10,32 @@ import random
 import shutil as sh
 from shutil import copyfile
 import zipfile
+import hashlib
+
 
 import csv
 
 
+
+
+def get_image_hash(img_path):
+    img = cv2.imread(img_path, cv2.IMREAD_UNCHANGED)  # Read image
+    if img is None:
+        raise ValueError(f"Could not read image at {img_path}")
+
+    img_bytes = img.tobytes()  # Convert NumPy array to bytes
+    img_hash = hashlib.md5(img_bytes).hexdigest()  # Compute MD5 hash
+    return img_hash
+
 def save_csv(csv_path, csv_content):
-    with open(csv_path, 'w') as csvfile:
+    with open(csv_path, 'w', newline='') as csvfile:
         wr = csv.writer(csvfile)
-        for i in range(len(csv_content)):
-            wr.writerow(csv_content[i])
+        for row in csv_content:
+            if len(row) == 8:  # Ensure there are exactly 8 columns per row
+                wr.writerow(row)
+            else:
+                print(f"Skipping invalid row: {row}")
+
 
 
 def get_bbox_visualize(base_path, dir):

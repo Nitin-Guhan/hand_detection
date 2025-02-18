@@ -3,15 +3,17 @@
 import numpy as np
 import sys
 import tensorflow as tf
+
 import os
 from threading import Thread
 from datetime import datetime
 import cv2
-from utils import label_map_util
+import label_map_util
 from collections import defaultdict
 
 
 detection_graph = tf.Graph()
+
 sys.path.append("..")
 
 # score threshold for showing bounding boxes.
